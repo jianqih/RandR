@@ -1,0 +1,157 @@
+# 文献复刻：The Long-term Effects of Africa's Slave Trades
+
+@Nunn2008 这篇文献可称为是在学习IV时候的经典文献，2008年发表在QJE。
+
+## 文献回顾
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,cache = TRUE)
+```
+
+
+## 数据来源
+
+
+```{r}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(
+  sf, # vector data operations
+  tidyverse, # data wrangling
+  units,
+  rmapshaper,
+  lwgeom,
+  tictoc,
+  haven
+)
+```
+
+
+```{r}
+#--- coast line ---#
+coast <-
+  sf::st_read(here::here("data/nunn_2008/input/10m-coastline/10m_coastline.shp")) %>%
+  st_transform(3857)
+```
+```{r}
+#--- African countries ---#
+countries <-
+  sf::st_read(here::here("data/nunn_2008/input/gadm36_africa/gadm36_africa.shp")) %>%
+  st_transform(3857)
+```
+```{r}
+#--- ethnic regions ---#
+ethnic_regions <-
+  sf::st_read(here::here("data/nunn_2008/input/Murdock_shapefile/borders_tribes.shp")) %>%
+  st_transform(3857)
+```
+
+
+```{r}
+# lat/long for slave trade centers
+trade_centers <- readxl::read_xls(here::here("data/nunn_2008/input/nunn2008.xls"))
+```
+
+
+
+## 计算最近的贸易距离
+
+```{r}
+countries_simp <- rmapshaper::ms_simplify(countries)
+```
+
+
+```{r}
+(
+  g_countries <-
+    ggplot(data = countries_simp) +
+    geom_sf() +
+    theme_void()
+)
+```
+
+
+用`st_centroid()`来发现每一个国家的质心.
+
+```{r}
+countries_centroid <- st_centroid(countries)
+ggplot()+
+  geom_sf(data = countries_simp)+
+  geom_sf(data = countries_centroid,color='red',size =0.5)
+```
+
+
+
+```{r}
+(
+  coast_union <- st_union(coast)
+)
+```
+
+```{r}
+minum_dist_to_coast <- st_nearest_points(countries_centroid, coast_union)
+```
+
+
+
+```{r}
+(
+  g_min_dist_line <-
+    ggplot() +
+    geom_sf(data = countries_simp) +
+    geom_sf(data = minum_dist_to_coast, color = "red") +
+    theme_void()
+)
+```
+
+
+```{r}
+closest_pt_on_coast <- lwgeom::st_endpoint(minum_dist_to_coast)
+
+```
+
+
+```{r}
+g_min_dist_line +
+  geom_sf(
+    data = closest_pt_on_coast,
+    color = "blue",
+    size = 2
+  ) +
+  theme_void()
+```
+
+
+
+```{r}
+countries_simp$nearest_pt <- closest_pt_on_coast
+```
+
+
+```{r}
+(
+  trade_centers_sf <-
+    trade_centers %>%
+    st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
+    st_transform(crs = 3857)
+)
+```
+
+
+
+```{r}
+ggplot() +
+  geom_sf(data = trade_centers_sf, color = "red") +
+  geom_sf(data = countries_simp, aes(geometry = geometry)) +
+  theme_void()
+```
+
+
+
+
+
+
+
+
+
+

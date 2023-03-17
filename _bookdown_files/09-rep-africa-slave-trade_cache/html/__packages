@@ -1,0 +1,17 @@
+ggplot2
+dplyr
+pacman
+sf
+tidyverse
+tibble
+tidyr
+readr
+purrr
+stringr
+forcats
+lubridate
+units
+rmapshaper
+lwgeom
+tictoc
+haven

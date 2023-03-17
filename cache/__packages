@@ -1,0 +1,13 @@
+base
+methods
+ggplot2
+dplyr
+datasets
+utils
+grDevices
+graphics
+stats
+sp
+maptools
+rgdal
+plyr

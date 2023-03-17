@@ -1,0 +1,222 @@
+
+# 土地流转研究
+
+数据来源：[CFPS](http://www.isss.pku.edu.cn/cfps/index.htm)
+
+本章主要参考四川师范大学王敏杰老师的[研究笔记](https://bookdown.org/wangminjie/R4cfps/land.html)
+
+## 载入包
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message = F)
+```
+
+```{r}
+library(tidyverse)
+library(purrr)
+library(haven)
+library(visdat)
+```
+
+
+## 导入数据
+
+```{r}
+cfps2010family <- read_dta("data/cfps/2010/cfps2010famecon_202008.dta")
+cfps2010family %>%
+  select(fid,urban, starts_with("fk201_a")) %>%
+  glimpse()
+```
+
+
+## 查看变量标签
+
+
+对于原有数据，都是存在一个标签来显示原始的问题形式，因此我们可以先查看我们想要找的问题的标签是否对应。先创建一个`get_var_label`的函数。
+
+
+```{r}
+library(purrr)
+get_var_label <- function(dta) {
+  labels <- map(dta, function(x) attr(x, "label"))
+  data_frame(
+    name = names(labels),
+    label = as.character(labels)
+  )
+}
+```
+
+
+根据观察原有标签，我们可知道`fk201_a_n`的变量都是拥有的农业资产，`fk202_a_n`、`fk203_a_n`和`fk204_a_n`分别是经营、转租入和转租出多少农业资产。
+
+```{r}
+cfps2010family %>%
+  select(urban, starts_with("fk201_a")) %>%
+  get_var_label()
+```
+
+
+
+
+```{r}
+cfps2010family %>%
+  select(urban, starts_with("fk201_a")) %>%
+  map(~ count(data.frame(x = .x), x))
+```
+
+这里使用了`map`函数来构建一个映射，映射到一个累加求和，第一张表是农业户口和城镇户口的数量对比，后面的表都是密度分布。
+
+
+
+## 数据规整
+
+
+```{r}
+library(naniar)
+cfps2010family %>%
+  select(urban, starts_with("fk201_a")) %>%
+  miss_var_summary()
+```
+
+基本上是没有缺失数据。
+
+
+
+```{r}
+library(visdat)
+cfps2010family %>%
+  select(urban, starts_with("fk201_a")) %>%
+  vis_dat()
+```
+
+
+
+为防止包之间的函数冲突，使用`conflicted`来prefer到`dplyr`中的`filter`。
+
+```{r}
+library(conflicted)
+conflict_prefer("filter", "dplyr")
+
+cfps2010family %>%
+  select(urban, starts_with("fk2_s"))%>%
+  filter(urban == 0)
+```
+
+
+
+先找出有经营土地的家户：并不考虑是否是自己拥有还是转租入。
+
+```{r}
+a <- cfps2010family %>%
+  select(fid,urban, starts_with("fk201_a")) %>%
+  filter_at(vars(starts_with("fk201_a")), any_vars(. > 0))
+a
+```
+
+
+
+再将负值转变为0。
+
+```{r}
+a %>% mutate_at(vars(starts_with("fk201_a")), funs(replace(., . < 0, 0)))
+```
+
+
+### 农业生产效率
+
+```{r}
+a <- cfps2010family %>%
+  select(fid,urban, starts_with("fk201_a"),fk3,fk4,fe1)%>%
+  mutate(revenue = fk3-fk4)%>%
+  mutate_at(vars(starts_with("fk201_a")), funs(replace(., . < 0, 0)))%>%
+  mutate_at(vars("revenue"), funs(replace(., . < 0, 0)))%>%
+  dplyr::filter(revenue>0)
+a
+```
+
+
+一个有效的建议是在对原始数据进行操作时候，尽量保证原始数据的不变，再通过`%>%`进行传导到新的数据框中。
+
+
+
+我们计算农业生产效率的方法有很多这里主要参考的是一些主流的做法：将单位面积纯利润作为效率的衡量指标
+
+```{r}
+a%>%
+  mutate(landsum = rowSums(.[2:7]))%>%
+  filter(landsum>0)%>%
+  mutate(rates = revenue/landsum)->a1
+a1
+```
+
+
+
+
+### 流动人口
+
+我们可以用外出打工在家庭人口中的占比来测算流动率。
+
+![](image/fe1.png)
+
+
+
+```{r}
+library(conflicted)
+conflict_prefer('filter',"dplyr")
+a1%>%
+  filter(fe1!=5)->a2
+a2$fe1[a2$fe1==3] <- 0
+a2%>%
+  select(rates,fe1)
+```
+
+
+
+
+
+## 模型建立
+
+我们试图考察关于流动人口与农业生产效率之间的关系：
+
+```{r}
+reg <- lm(data = a2,fe1~rates)
+summary(reg)
+```
+
+不过不显著。。。不过系数上看是一个较为合理的存在（效率上升，抑制外出）。对于一个想要看星星的reg monkey来说极其苦恼。我们可以考虑换一个变量：一篇2016年在《中国农村经济》的文章研究“非农就业、土地流转与农业生产效率变化”利用的是非农就业来考察劳动生产率（同样也是用单位土地的农产品收入来测算）就较为显著，主要的差别在于非农就业数量来测度，并非一个虚拟变量。
+还有一个可能是在先前的数据处理中存在一定的问题，比如是否将未从事农业活动的家户过滤进来。
+
+```{r}
+cfps2010family%>%
+  select(fid,familysize,starts_with("fu1_s"))%>%
+  mutate_at(vars(starts_with("fu1_s")), funs(replace(., . < 0, 0)))%>%
+  mutate_at(vars(starts_with("fu1_s")), funs(replace(., . >=1, 1)))->b1
+```
+
+
+并不建议一次性将所有变换都做完，之后再检查是非常痛苦的。。。
+
+
+
+```{r}
+b1%>%
+  mutate(mig = rowSums(.[3:14]))%>%
+  select(fid,familysize,mig)%>%
+  mutate(mig_rate = mig/familysize)%>%
+  filter(mig_rate<=1&mig_rate>=0)->b2# 剔除异常值
+barplot(table(b2$mig_rate))
+dim(b2)
+```
+
+
+```{r}
+b3 <- merge(a2,b2,by="fid")
+reg2 <- lm(data = b3,mig_rate~rates)
+summary(reg2)
+```
+
+p值比之前还更大了。。。上述提到的文章的核心解释变量是非农占家庭劳动力比例，但目前还不知咋构建的。。。想到了再补上去。
+
+
+

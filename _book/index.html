@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>基于R的文献复刻：利用中国微观数据库</title>
+  <meta name="description" content="This book written based on the data waranting using micro-database in China." />
+  <meta name="generator" content="bookdown 0.32 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="基于R的文献复刻：利用中国微观数据库" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This book written based on the data waranting using micro-database in China." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="基于R的文献复刻：利用中国微观数据库" />
+  
+  <meta name="twitter:description" content="This book written based on the data waranting using micro-database in China." />
+  
+
+<meta name="author" content="黄建祺" />
+
+
+<meta name="date" content="2023-03-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="土地流转研究.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.1/htmlwidgets.js"></script>
+<script src="libs/echarts4r-4.8.0/echarts-en.min.js"></script>
+<script src="libs/echarts4r-4.8.0/ecStat.min.js"></script>
+<script src="libs/echarts4r-4.8.0/dataTool.min.js"></script>
+<script src="libs/echarts4r-binding-0.4.4/echarts4r.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX","output/SVG"],
+  extensions: ["tex2jax.js","MathMenu.js","MathZoom.js"],
+  TeX: {
+    extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+  }
+});
+</script>
+<script type="text/javascript"
+   src="../../../MathJax/MathJax.js">
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>前言</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#缘起"><i class="fa fa-check"></i><b>0.1</b> 缘起</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#为何是r"><i class="fa fa-check"></i><b>0.2</b> 为何是R</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#如何食用"><i class="fa fa-check"></i><b>0.3</b> 如何食用</a></li>
+<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#r入门"><i class="fa fa-check"></i><b>0.4</b> R入门</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="土地流转研究.html"><a href="土地流转研究.html"><i class="fa fa-check"></i><b>1</b> 土地流转研究</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="土地流转研究.html"><a href="土地流转研究.html#载入包"><i class="fa fa-check"></i><b>1.1</b> 载入包</a></li>
+<li class="chapter" data-level="1.2" data-path="土地流转研究.html"><a href="土地流转研究.html#导入数据"><i class="fa fa-check"></i><b>1.2</b> 导入数据</a></li>
+<li class="chapter" data-level="1.3" data-path="土地流转研究.html"><a href="土地流转研究.html#查看变量标签"><i class="fa fa-check"></i><b>1.3</b> 查看变量标签</a></li>
+<li class="chapter" data-level="1.4" data-path="土地流转研究.html"><a href="土地流转研究.html#数据规整"><i class="fa fa-check"></i><b>1.4</b> 数据规整</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="土地流转研究.html"><a href="土地流转研究.html#农业生产效率"><i class="fa fa-check"></i><b>1.4.1</b> 农业生产效率</a></li>
+<li class="chapter" data-level="1.4.2" data-path="土地流转研究.html"><a href="土地流转研究.html#流动人口"><i class="fa fa-check"></i><b>1.4.2</b> 流动人口</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="土地流转研究.html"><a href="土地流转研究.html#模型建立"><i class="fa fa-check"></i><b>1.5</b> 模型建立</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="文献复刻劳动力流动如何影响农户借贷.html"><a href="文献复刻劳动力流动如何影响农户借贷.html"><i class="fa fa-check"></i><b>2</b> 文献复刻：《劳动力流动如何影响农户借贷》</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="文献复刻劳动力流动如何影响农户借贷.html"><a href="文献复刻劳动力流动如何影响农户借贷.html#文献回顾"><i class="fa fa-check"></i><b>2.1</b> 文献回顾</a></li>
+<li class="chapter" data-level="2.2" data-path="文献复刻劳动力流动如何影响农户借贷.html"><a href="文献复刻劳动力流动如何影响农户借贷.html#数据处理"><i class="fa fa-check"></i><b>2.2</b> 数据处理</a></li>
+<li class="chapter" data-level="2.3" data-path="文献复刻劳动力流动如何影响农户借贷.html"><a href="文献复刻劳动力流动如何影响农户借贷.html#统计描述"><i class="fa fa-check"></i><b>2.3</b> 统计描述</a></li>
+<li class="chapter" data-level="2.4" data-path="文献复刻劳动力流动如何影响农户借贷.html"><a href="文献复刻劳动力流动如何影响农户借贷.html#模型设定"><i class="fa fa-check"></i><b>2.4</b> 模型设定</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="culture.html"><a href="culture.html"><i class="fa fa-check"></i><b>3</b> 宗族文化</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="culture.html"><a href="culture.html#数据载入"><i class="fa fa-check"></i><b>3.1</b> 数据载入</a></li>
+<li class="chapter" data-level="3.2" data-path="culture.html"><a href="culture.html#可视化"><i class="fa fa-check"></i><b>3.2</b> 可视化</a></li>
+<li class="chapter" data-level="3.3" data-path="culture.html"><a href="culture.html#地图"><i class="fa fa-check"></i><b>3.3</b> 地图</a></li>
+<li class="chapter" data-level="3.4" data-path="culture.html"><a href="culture.html#其他数据源"><i class="fa fa-check"></i><b>3.4</b> 其他数据源</a></li>
+<li class="chapter" data-level="3.5" data-path="culture.html"><a href="culture.html#重新再利用"><i class="fa fa-check"></i><b>3.5</b> 重新再利用</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="charls.html"><a href="charls.html"><i class="fa fa-check"></i><b>4</b> CHARLS</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="charls.html"><a href="charls.html#数据导入"><i class="fa fa-check"></i><b>4.1</b> 数据导入</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="文献复刻新型农村社会养老保险政策效果评估.html"><a href="文献复刻新型农村社会养老保险政策效果评估.html"><i class="fa fa-check"></i><b>5</b> 文献复刻：《新型农村社会养老保险政策效果评估》</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="文献复刻新型农村社会养老保险政策效果评估.html"><a href="文献复刻新型农村社会养老保险政策效果评估.html#数据导入-1"><i class="fa fa-check"></i><b>5.1</b> 数据导入</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="chfs.html"><a href="chfs.html"><i class="fa fa-check"></i><b>6</b> CHFS</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="chfs.html"><a href="chfs.html#数据读取"><i class="fa fa-check"></i><b>6.1</b> 数据读取</a></li>
+<li class="chapter" data-level="6.2" data-path="chfs.html"><a href="chfs.html#构建变量"><i class="fa fa-check"></i><b>6.2</b> 构建变量</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="chfs.html"><a href="chfs.html#社会互动"><i class="fa fa-check"></i><b>6.2.1</b> 社会互动</a></li>
+<li class="chapter" data-level="6.2.2" data-path="chfs.html"><a href="chfs.html#金融知识"><i class="fa fa-check"></i><b>6.2.2</b> 金融知识</a></li>
+<li class="chapter" data-level="6.2.3" data-path="chfs.html"><a href="chfs.html#金融排斥"><i class="fa fa-check"></i><b>6.2.3</b> 金融排斥</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="其他来源数据.html"><a href="其他来源数据.html"><i class="fa fa-check"></i><b>7</b> 其他来源数据</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="其他来源数据.html"><a href="其他来源数据.html#方言数据"><i class="fa fa-check"></i><b>7.1</b> 方言数据</a></li>
+<li class="chapter" data-level="7.2" data-path="其他来源数据.html"><a href="其他来源数据.html#夜间灯光数据"><i class="fa fa-check"></i><b>7.2</b> 夜间灯光数据</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="其他来源数据.html"><a href="其他来源数据.html#获取方法"><i class="fa fa-check"></i><b>7.2.1</b> 获取方法</a></li>
+<li class="chapter" data-level="7.2.2" data-path="其他来源数据.html"><a href="其他来源数据.html#api"><i class="fa fa-check"></i><b>7.2.2</b> API</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="其他来源数据.html"><a href="其他来源数据.html#政治数据"><i class="fa fa-check"></i><b>7.3</b> 政治数据</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="论文复刻climate-risks-and-market-efficiency.html"><a href="论文复刻climate-risks-and-market-efficiency.html"><i class="fa fa-check"></i><b>8</b> 论文复刻<code>Climate risks and market efficiency</code></a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="论文复刻climate-risks-and-market-efficiency.html"><a href="论文复刻climate-risks-and-market-efficiency.html#data"><i class="fa fa-check"></i><b>8.1</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="文献复刻the-long-term-effects-of-africas-slave-trades.html"><a href="文献复刻the-long-term-effects-of-africas-slave-trades.html"><i class="fa fa-check"></i><b>9</b> 文献复刻：The Long-term Effects of Africa’s Slave Trades</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="文献复刻the-long-term-effects-of-africas-slave-trades.html"><a href="文献复刻the-long-term-effects-of-africas-slave-trades.html#文献回顾-1"><i class="fa fa-check"></i><b>9.1</b> 文献回顾</a></li>
+<li class="chapter" data-level="9.2" data-path="文献复刻the-long-term-effects-of-africas-slave-trades.html"><a href="文献复刻the-long-term-effects-of-africas-slave-trades.html#数据来源"><i class="fa fa-check"></i><b>9.2</b> 数据来源</a></li>
+<li class="chapter" data-level="9.3" data-path="文献复刻the-long-term-effects-of-africas-slave-trades.html"><a href="文献复刻the-long-term-effects-of-africas-slave-trades.html#计算最近的贸易距离"><i class="fa fa-check"></i><b>9.3</b> 计算最近的贸易距离</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="后记.html"><a href="后记.html"><i class="fa fa-check"></i><b>10</b> 后记</a></li>
+<li class="chapter" data-level="" data-path="参考文献.html"><a href="参考文献.html"><i class="fa fa-check"></i>参考文献</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">基于R的文献复刻：利用中国微观数据库</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">基于R的文献复刻：利用中国微观数据库</h1>
+<p class="author"><em>黄建祺</em></p>
+<p class="date"><em>2023-03-17</em></p>
+</div>
+<div id="前言" class="section level1 unnumbered hasAnchor">
+<h1>前言<a href="index.html#前言" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="缘起" class="section level2 hasAnchor" number="0.1">
+<h2><span class="header-section-number">0.1</span> 缘起<a href="index.html#缘起" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>突然想要研究某一个中国的微观数据库，但又无奈苯人掌握Stata技法有限，想要再去学有点学不动了。忽然一次在网上看到林敏杰老师的<a href="https://bookdown.org/wangminjie/R4cfps/">《CFPS 之R语言学习笔记》</a> 瞬间为我打开了一扇窗，所以尝试使用R来实现一些在实证经济学的一些应用或称为复刻，另外加上一丁点的探索。之前也看到国外的在利用<strong>shiny</strong>搭建的网站<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>做的文献复刻，因此就有一些用<code>R</code>来做的冲动。</p>
+</div>
+<div id="为何是r" class="section level2 hasAnchor" number="0.2">
+<h2><span class="header-section-number">0.2</span> 为何是R<a href="index.html#为何是r" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>为何选择使用R呢。现在在复刻文献的主流方法是使用Stata，同时在一些wiki 或者期刊网站、数据网站<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> 上大部分是使用stata来实现复刻或者源代码的。但目前，一些经济学、政治学学者开始在利用R做基本的计量分析，甚至开发专门的R包来实现一些高级计量方法，在R中有很多超越于Stata的优势。</p>
+</div>
+<div id="如何食用" class="section level2 hasAnchor" number="0.3">
+<h2><span class="header-section-number">0.3</span> 如何食用<a href="index.html#如何食用" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>这本书是基于中国的几大微观数据库及相关的顶刊上的文章为主要内容写成的自我技术修炼笔记，为最大化他的社会效益，以<strong>bookdown</strong>形式生成。希望能够对你有所帮助。</p>
+<p>在经济学研究中，近些年来对于微观数据的使用变得尤为重要，尤其是大型的微观数据库的使用。但常用的处理方法往往是选择在Stata中进行操作。但在另一方面，R相对于Stata的使用有其独特的优势，尤其是在使用多个数据框操作时候，在今天的一篇文章中很难就单单一个数据源就能完成一篇好的文章写作，因此对于不同数据源进行交互性操作愈发重要。因此有必要使用R来对数据进行相应的操作。同时R也是支持于<code>.dta</code>数据的读取。</p>
+<p>同时再深了讲在不同语言之间的比较，<span class="citation">Aruoba and Fernández-Villaverde (<a href="#ref-ARUOBA2015265" role="doc-biblioref">2015</a>)</span> 有对比不同的编程语言的运行速度，同时需要强调的是C++/Fortran/Java对比其他的语言是更难学习的，由其本身的特性所决定的，所以对于经济学家来说没有那么多的时间成本学习前三种语言，但可以作为一个参照。最后发现Julia的表现尤其突出，甚至超过于Java，远甩身后的Matlab好几米；Python与R基本上持平，但一用上Pypy编译器立马加速；最慢的是Mathemetica（虽然我也没用过）
+<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:com-jedc"></span>
+<img src="image/com-jedc.png" alt="图来自上述文章" width="679" />
+<p class="caption">
+图0.1: 图来自上述文章
+</p>
+</div>
+<p>Julia的强劲表现让很多经济学者极力推崇<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> 相关的学习材料在<a href="https://quantecon.org/">Quantecon</a> 就很丰富了。</p>
+<p>但我们这里并不需要大量的数据，因此对于编译速度的要求并不高，RStudio能够满足日常的基本需要。</p>
+</div>
+<div id="r入门" class="section level2 hasAnchor" number="0.4">
+<h2><span class="header-section-number">0.4</span> R入门<a href="index.html#r入门" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>关于R的入门这里不多介绍，<a href="www.bookdown.org">bookdown</a>中有大量关于R的入门书籍。这里可以做出一定的推荐：</p>
+<p>英文比较好的话：</p>
+<ul>
+<li><p><a href="file:///Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/doc/manual/R-intro.html">官方manual</a></p></li>
+<li><p><a href="https://r4ds.had.co.nz/">R for Data Science</a></p></li>
+<li><p><a href="https://moderndive.com/">modern dive</a></p></li>
+<li><p><a href="https://www.bigbookofr.com/">Big book of R</a>：和字典一样厚，作者至今还在更新。</p></li>
+</ul>
+<p>看中文更有优势的话：</p>
+<ul>
+<li><p><a href="https://www.math.pku.edu.cn/teachers/lidf/docs/Rbook/html/_Rbook/index.html">R语言教程</a></p></li>
+<li><p><a href="https://bookdown.org/wangminjie/R4DS/">数据科学中的R语言</a></p></li>
+</ul>
+<p>当然因为这里主要介绍一些经济学论文和经济学方法，不可避免要学习和使用计量及R上的应用。同样有很多出色的线上教材。</p>
+<ul>
+<li><a href="https://www.econometrics-with-r.org/">Introduction to Econometric with R</a></li>
+<li><a href="https://mixtape.scunning.com/">Causal Inference: The Mixtape</a>: 有三种语言的代码任你选择。</li>
+</ul>
+<p>需要注意的是在R中进行数据处理，必然无法避开学习和使用<strong>tidyverse</strong>，因为这才是数据科学学习R的优势之处。</p>
+<p>这篇所需要使用的R包：使用<code>pacman</code>免去验证是否安装的烦恼。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;pacman&quot;</span>)) <span class="fu">install.packages</span>(<span class="st">&quot;pacman&quot;</span>)</span></code></pre></div>
+<pre><code>## Loading required package: pacman</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">p_load</span>(tidyverse,</span>
+<span id="cb3-2"><a href="index.html#cb3-2" aria-hidden="true" tabindex="-1"></a>       purrr,</span>
+<span id="cb3-3"><a href="index.html#cb3-3" aria-hidden="true" tabindex="-1"></a>       haven,</span>
+<span id="cb3-4"><a href="index.html#cb3-4" aria-hidden="true" tabindex="-1"></a>       visdat,</span>
+<span id="cb3-5"><a href="index.html#cb3-5" aria-hidden="true" tabindex="-1"></a>       sf,</span>
+<span id="cb3-6"><a href="index.html#cb3-6" aria-hidden="true" tabindex="-1"></a>       units,</span>
+<span id="cb3-7"><a href="index.html#cb3-7" aria-hidden="true" tabindex="-1"></a>       lwgeom,</span>
+<span id="cb3-8"><a href="index.html#cb3-8" aria-hidden="true" tabindex="-1"></a>       rmapshaper,</span>
+<span id="cb3-9"><a href="index.html#cb3-9" aria-hidden="true" tabindex="-1"></a>       tictoc)</span></code></pre></div>
+
+</div>
+</div>
+<h3>参考文献<a href="参考文献.html#参考文献" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-ARUOBA2015265" class="csl-entry">
+Aruoba, S. Borağan, and Jesús Fernández-Villaverde. 2015. <span>“A Comparison of Programming Languages in Macroeconomics.”</span> <em>Journal of Economic Dynamics and Control</em> 58: 265–73. <a href="https://www.sciencedirect.com/science/article/pii/S0165188915000883">https://www.sciencedirect.com/science/article/pii/S0165188915000883</a>.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p><a href="https://ejd.econ.mathematik.uni-ulm.de/" class="uri">https://ejd.econ.mathematik.uni-ulm.de/</a><a href="index.html#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>这篇知乎总结了所有可以发现代码的地方<a href="index.html#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>文章的代码可以<a href="https://github.com/jesusfv/Comparison-Programming-Languages-Economics">在github仓库中找到</a><a href="index.html#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>以诺奖得主、宏观学者Sargent为代表<a href="index.html#fnref4" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="土地流转研究.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["rrep.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
