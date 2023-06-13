@@ -1,7 +1,7 @@
 ---
 title: "基于R的文献复刻：利用中国微观数据库"
 author: "黄建祺"
-date: "2023-03-17"
+date: "2023-06-13"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib,article.bib]
@@ -40,7 +40,7 @@ github-repo: rstudio/bookdown-demo
 ^[文章的代码可以[在github仓库中找到](https://github.com/jesusfv/Comparison-Programming-Languages-Economics)]
 
 <div class="figure" style="text-align: center">
-<img src="image/com-jedc.png" alt="图来自上述文章" width="1358" />
+<img src="image/com-jedc.png" alt="图来自上述文章" width="679" />
 <p class="caption">(\#fig:com-jedc)图来自上述文章</p>
 </div>
 

@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>1 R-econometric workflow | 基于R的文献复刻：利用中国微观数据库</title>
+  <meta name="description" content="This book written based on the data waranting using micro-database in China." />
+  <meta name="generator" content="bookdown 0.32 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="1 R-econometric workflow | 基于R的文献复刻：利用中国微观数据库" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This book written based on the data waranting using micro-database in China." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="1 R-econometric workflow | 基于R的文献复刻：利用中国微观数据库" />
+  
+  <meta name="twitter:description" content="This book written based on the data waranting using micro-database in China." />
+  
+
+<meta name="author" content="黄建祺" />
+
+
+<meta name="date" content="2023-03-31" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="土地流转研究.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.1/htmlwidgets.js"></script>
+<script src="libs/echarts4r-4.8.0/echarts-en.min.js"></script>
+<script src="libs/echarts4r-4.8.0/ecStat.min.js"></script>
+<script src="libs/echarts4r-4.8.0/dataTool.min.js"></script>
+<script src="libs/echarts4r-binding-0.4.4/echarts4r.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX","output/SVG"],
+  extensions: ["tex2jax.js","MathMenu.js","MathZoom.js"],
+  TeX: {
+    extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+  }
+});
+</script>
+<script type="text/javascript"
+   src="../../../MathJax/MathJax.js">
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>前言</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#缘起"><i class="fa fa-check"></i><b>0.1</b> 缘起</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#为何是r"><i class="fa fa-check"></i><b>0.2</b> 为何是R</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#如何食用"><i class="fa fa-check"></i><b>0.3</b> 如何食用</a></li>
+<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#r入门"><i class="fa fa-check"></i><b>0.4</b> R入门</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="r-econometric-workflow.html"><a href="r-econometric-workflow.html"><i class="fa fa-check"></i><b>1</b> R-econometric workflow</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="r-econometric-workflow.html"><a href="r-econometric-workflow.html#stargazer"><i class="fa fa-check"></i><b>1.1</b> Stargazer</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="r-econometric-workflow.html"><a href="r-econometric-workflow.html#描述性统计"><i class="fa fa-check"></i><b>1.1.1</b> 描述性统计</a></li>
+<li class="chapter" data-level="1.1.2" data-path="r-econometric-workflow.html"><a href="r-econometric-workflow.html#回归结果报告"><i class="fa fa-check"></i><b>1.1.2</b> 回归结果报告</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="r-econometric-workflow.html"><a href="r-econometric-workflow.html#在rstudio中写作"><i class="fa fa-check"></i><b>1.2</b> 在RStudio中写作</a></li>
+<li class="chapter" data-level="1.3" data-path="r-econometric-workflow.html"><a href="r-econometric-workflow.html#presentation"><i class="fa fa-check"></i><b>1.3</b> Presentation</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="土地流转研究.html"><a href="土地流转研究.html"><i class="fa fa-check"></i><b>2</b> 土地流转研究</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="土地流转研究.html"><a href="土地流转研究.html#载入包"><i class="fa fa-check"></i><b>2.1</b> 载入包</a></li>
+<li class="chapter" data-level="2.2" data-path="土地流转研究.html"><a href="土地流转研究.html#导入数据"><i class="fa fa-check"></i><b>2.2</b> 导入数据</a></li>
+<li class="chapter" data-level="2.3" data-path="土地流转研究.html"><a href="土地流转研究.html#查看变量标签"><i class="fa fa-check"></i><b>2.3</b> 查看变量标签</a></li>
+<li class="chapter" data-level="2.4" data-path="土地流转研究.html"><a href="土地流转研究.html#数据规整"><i class="fa fa-check"></i><b>2.4</b> 数据规整</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="土地流转研究.html"><a href="土地流转研究.html#农业生产效率"><i class="fa fa-check"></i><b>2.4.1</b> 农业生产效率</a></li>
+<li class="chapter" data-level="2.4.2" data-path="土地流转研究.html"><a href="土地流转研究.html#流动人口"><i class="fa fa-check"></i><b>2.4.2</b> 流动人口</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="土地流转研究.html"><a href="土地流转研究.html#模型建立"><i class="fa fa-check"></i><b>2.5</b> 模型建立</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="文献复刻劳动力流动如何影响农户借贷.html"><a href="文献复刻劳动力流动如何影响农户借贷.html"><i class="fa fa-check"></i><b>3</b> 文献复刻：《劳动力流动如何影响农户借贷》</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="文献复刻劳动力流动如何影响农户借贷.html"><a href="文献复刻劳动力流动如何影响农户借贷.html#文献回顾"><i class="fa fa-check"></i><b>3.1</b> 文献回顾</a></li>
+<li class="chapter" data-level="3.2" data-path="文献复刻劳动力流动如何影响农户借贷.html"><a href="文献复刻劳动力流动如何影响农户借贷.html#数据处理"><i class="fa fa-check"></i><b>3.2</b> 数据处理</a></li>
+<li class="chapter" data-level="3.3" data-path="文献复刻劳动力流动如何影响农户借贷.html"><a href="文献复刻劳动力流动如何影响农户借贷.html#统计描述"><i class="fa fa-check"></i><b>3.3</b> 统计描述</a></li>
+<li class="chapter" data-level="3.4" data-path="文献复刻劳动力流动如何影响农户借贷.html"><a href="文献复刻劳动力流动如何影响农户借贷.html#模型设定"><i class="fa fa-check"></i><b>3.4</b> 模型设定</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="culture.html"><a href="culture.html"><i class="fa fa-check"></i><b>4</b> 宗族文化</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="culture.html"><a href="culture.html#数据载入"><i class="fa fa-check"></i><b>4.1</b> 数据载入</a></li>
+<li class="chapter" data-level="4.2" data-path="culture.html"><a href="culture.html#可视化"><i class="fa fa-check"></i><b>4.2</b> 可视化</a></li>
+<li class="chapter" data-level="4.3" data-path="culture.html"><a href="culture.html#地图"><i class="fa fa-check"></i><b>4.3</b> 地图</a></li>
+<li class="chapter" data-level="4.4" data-path="culture.html"><a href="culture.html#其他数据源"><i class="fa fa-check"></i><b>4.4</b> 其他数据源</a></li>
+<li class="chapter" data-level="4.5" data-path="culture.html"><a href="culture.html#重新再利用"><i class="fa fa-check"></i><b>4.5</b> 重新再利用</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="charls.html"><a href="charls.html"><i class="fa fa-check"></i><b>5</b> CHARLS</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="charls.html"><a href="charls.html#数据导入"><i class="fa fa-check"></i><b>5.1</b> 数据导入</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="文献复刻新型农村社会养老保险政策效果评估.html"><a href="文献复刻新型农村社会养老保险政策效果评估.html"><i class="fa fa-check"></i><b>6</b> 文献复刻：《新型农村社会养老保险政策效果评估》</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="文献复刻新型农村社会养老保险政策效果评估.html"><a href="文献复刻新型农村社会养老保险政策效果评估.html#数据导入-1"><i class="fa fa-check"></i><b>6.1</b> 数据导入</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="chfs.html"><a href="chfs.html"><i class="fa fa-check"></i><b>7</b> CHFS</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="chfs.html"><a href="chfs.html#数据读取"><i class="fa fa-check"></i><b>7.1</b> 数据读取</a></li>
+<li class="chapter" data-level="7.2" data-path="chfs.html"><a href="chfs.html#构建变量"><i class="fa fa-check"></i><b>7.2</b> 构建变量</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="chfs.html"><a href="chfs.html#社会互动"><i class="fa fa-check"></i><b>7.2.1</b> 社会互动</a></li>
+<li class="chapter" data-level="7.2.2" data-path="chfs.html"><a href="chfs.html#金融知识"><i class="fa fa-check"></i><b>7.2.2</b> 金融知识</a></li>
+<li class="chapter" data-level="7.2.3" data-path="chfs.html"><a href="chfs.html#金融排斥"><i class="fa fa-check"></i><b>7.2.3</b> 金融排斥</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="其他来源数据.html"><a href="其他来源数据.html"><i class="fa fa-check"></i><b>8</b> 其他来源数据</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="其他来源数据.html"><a href="其他来源数据.html#方言数据"><i class="fa fa-check"></i><b>8.1</b> 方言数据</a></li>
+<li class="chapter" data-level="8.2" data-path="其他来源数据.html"><a href="其他来源数据.html#夜间灯光数据"><i class="fa fa-check"></i><b>8.2</b> 夜间灯光数据</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="其他来源数据.html"><a href="其他来源数据.html#获取方法"><i class="fa fa-check"></i><b>8.2.1</b> 获取方法</a></li>
+<li class="chapter" data-level="8.2.2" data-path="其他来源数据.html"><a href="其他来源数据.html#api"><i class="fa fa-check"></i><b>8.2.2</b> API</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="其他来源数据.html"><a href="其他来源数据.html#政治数据"><i class="fa fa-check"></i><b>8.3</b> 政治数据</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="论文复刻climate-risks-and-market-efficiency.html"><a href="论文复刻climate-risks-and-market-efficiency.html"><i class="fa fa-check"></i><b>9</b> 论文复刻<code>Climate risks and market efficiency</code></a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="论文复刻climate-risks-and-market-efficiency.html"><a href="论文复刻climate-risks-and-market-efficiency.html#data"><i class="fa fa-check"></i><b>9.1</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="文献复刻the-long-term-effects-of-africas-slave-trades.html"><a href="文献复刻the-long-term-effects-of-africas-slave-trades.html"><i class="fa fa-check"></i><b>10</b> 文献复刻：The Long-term Effects of Africa’s Slave Trades</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="文献复刻the-long-term-effects-of-africas-slave-trades.html"><a href="文献复刻the-long-term-effects-of-africas-slave-trades.html#文献回顾-1"><i class="fa fa-check"></i><b>10.1</b> 文献回顾</a></li>
+<li class="chapter" data-level="10.2" data-path="文献复刻the-long-term-effects-of-africas-slave-trades.html"><a href="文献复刻the-long-term-effects-of-africas-slave-trades.html#数据来源"><i class="fa fa-check"></i><b>10.2</b> 数据来源</a></li>
+<li class="chapter" data-level="10.3" data-path="文献复刻the-long-term-effects-of-africas-slave-trades.html"><a href="文献复刻the-long-term-effects-of-africas-slave-trades.html#计算最近的贸易距离"><i class="fa fa-check"></i><b>10.3</b> 计算最近的贸易距离</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="后记.html"><a href="后记.html"><i class="fa fa-check"></i><b>11</b> 后记</a></li>
+<li class="chapter" data-level="" data-path="参考文献.html"><a href="参考文献.html"><i class="fa fa-check"></i>参考文献</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">基于R的文献复刻：利用中国微观数据库</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="r-econometric-workflow" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">1</span> R-econometric workflow<a href="r-econometric-workflow.html#r-econometric-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>应用微观的经济学家的工作流会选择使用Stata（宏观学者可能会用Matlab或dynare）加上LaTeX（包括做slides）进行，若可能需要的话加上一些数据库的知识。但这样的工作方法会存在一个比较尴尬的问题：若在跑回归的时候出现一些变量/数据/模型的调整，最后输出结果（一般从Stata转换为LaTeX代码）也会跟着改变。这样就不得不将原有的结果进行相应的变化。</p>
+<p>这里使用wooldridge包中大学GPA相关数据来作为演示。</p>
+<div id="stargazer" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Stargazer<a href="r-econometric-workflow.html#stargazer" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="r-econometric-workflow.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(wooldridge)</span>
+<span id="cb1-2"><a href="r-econometric-workflow.html#cb1-2" tabindex="-1"></a><span class="fu">library</span>(stargazer)</span>
+<span id="cb1-3"><a href="r-econometric-workflow.html#cb1-3" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;gpa1&quot;</span>)</span></code></pre></div>
+<div id="描述性统计" class="section level3 hasAnchor" number="1.1.1">
+<h3><span class="header-section-number">1.1.1</span> 描述性统计<a href="r-econometric-workflow.html#描述性统计" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>选出我们所关心的几个变量进行描述性统计。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="r-econometric-workflow.html#cb2-1" tabindex="-1"></a>gpa_var <span class="ot">&lt;-</span> gpa1<span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="r-econometric-workflow.html#cb2-2" tabindex="-1"></a>  <span class="fu">select</span>(colGPA,hsGPA,ACT,skipped)</span></code></pre></div>
+<p>这里调用<code>psych</code>来进行描述性统计，但描述性统计的包并不仅限于此，甚至使用<code>dplyr</code>中的<code>summarize</code>也是一个比较好的选择。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="r-econometric-workflow.html#cb3-1" tabindex="-1"></a><span class="fu">library</span>(psych)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="r-econometric-workflow.html#cb4-1" tabindex="-1"></a><span class="fu">stargazer</span>(<span class="fu">describe</span>(gpa_var,<span class="at">trim =</span> F,<span class="at">skew =</span> F,<span class="at">ranges =</span> F),<span class="at">type =</span> <span class="st">&quot;html&quot;</span>)</span></code></pre></div>
+<table style="text-align:center">
+<tr>
+<td colspan="6" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Statistic
+</td>
+<td>
+N
+</td>
+<td>
+Mean
+</td>
+<td>
+St. Dev.
+</td>
+<td>
+Min
+</td>
+<td>
+Max
+</td>
+</tr>
+<tr>
+<td colspan="6" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+vars
+</td>
+<td>
+4
+</td>
+<td>
+2.500
+</td>
+<td>
+1.291
+</td>
+<td>
+1
+</td>
+<td>
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+n
+</td>
+<td>
+4
+</td>
+<td>
+141.000
+</td>
+<td>
+0.000
+</td>
+<td>
+141
+</td>
+<td>
+141
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+mean
+</td>
+<td>
+4
+</td>
+<td>
+7.923
+</td>
+<td>
+10.871
+</td>
+<td>
+1.076
+</td>
+<td>
+24.156
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+sd
+</td>
+<td>
+4
+</td>
+<td>
+1.156
+</td>
+<td>
+1.179
+</td>
+<td>
+0.320
+</td>
+<td>
+2.844
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+se
+</td>
+<td>
+4
+</td>
+<td>
+0.097
+</td>
+<td>
+0.099
+</td>
+<td>
+0.027
+</td>
+<td>
+0.240
+</td>
+</tr>
+<tr>
+<td colspan="6" style="border-bottom: 1px solid black">
+</td>
+</tr>
+</table>
+<p>需要记得的是在option中添加<code>results='asis'</code>才会将输出代码以raw code的形式放在文本中。这里因为是html格式的缘故，因此将输出格式输出为html。若使用LaTeX输出格式，则最终在tex中所呈现的状态会是</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="r-econometric-workflow.html#cb5-1" tabindex="-1"></a><span class="fu">stargazer</span>(<span class="fu">describe</span>(gpa_var,<span class="at">trim =</span> F,<span class="at">skew =</span> F,<span class="at">ranges =</span> F),<span class="at">type =</span> <span class="st">&quot;text&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## =========================================
+## Statistic N  Mean   St. Dev.  Min   Max  
+## -----------------------------------------
+## vars      4  2.500   1.291     1     4   
+## n         4 141.000  0.000    141   141  
+## mean      4  7.923   10.871  1.076 24.156
+## sd        4  1.156   1.179   0.320 2.844 
+## se        4  0.097   0.099   0.027 0.240 
+## -----------------------------------------</code></pre>
+</div>
+<div id="回归结果报告" class="section level3 hasAnchor" number="1.1.2">
+<h3><span class="header-section-number">1.1.2</span> 回归结果报告<a href="r-econometric-workflow.html#回归结果报告" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>先试图去回归一个基准组：</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="r-econometric-workflow.html#cb7-1" tabindex="-1"></a>reg.base <span class="ot">&lt;-</span> colGPA<span class="sc">~</span>hsGPA</span>
+<span id="cb7-2"><a href="r-econometric-workflow.html#cb7-2" tabindex="-1"></a>lm.base <span class="ot">&lt;-</span> <span class="fu">lm</span>(reg.base,gpa_var)</span></code></pre></div>
+<p>一个较为常用的快速查看回归结果的方法是使用<code>summary()</code>函数。</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="r-econometric-workflow.html#cb8-1" tabindex="-1"></a><span class="fu">summary</span>(lm.base)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = reg.base, data = gpa_var)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.85220 -0.26274 -0.04868  0.28902  0.88551 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  1.41543    0.30694   4.611 8.98e-06 ***
+## hsGPA        0.48243    0.08983   5.371 3.21e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.34 on 139 degrees of freedom
+## Multiple R-squared:  0.1719, Adjusted R-squared:  0.1659 
+## F-statistic: 28.85 on 1 and 139 DF,  p-value: 3.211e-07</code></pre>
+<p>再添加一组控制组：</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="r-econometric-workflow.html#cb10-1" tabindex="-1"></a>gpa.control <span class="ot">&lt;-</span> colGPA<span class="sc">~</span>hsGPA<span class="sc">+</span>ACT<span class="sc">+</span>skipped</span>
+<span id="cb10-2"><a href="r-econometric-workflow.html#cb10-2" tabindex="-1"></a>lm.control <span class="ot">&lt;-</span> <span class="fu">lm</span>(gpa.control,<span class="at">data =</span> gpa_var)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="r-econometric-workflow.html#cb11-1" tabindex="-1"></a>lm.list <span class="ot">&lt;-</span> <span class="fu">list</span>(lm.base,lm.control)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="r-econometric-workflow.html#cb12-1" tabindex="-1"></a><span class="fu">stargazer</span>(lm.list,<span class="at">type =</span> <span class="st">&quot;html&quot;</span>)</span></code></pre></div>
+<table style="text-align:center">
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="2">
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="2">
+colGPA
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1)
+</td>
+<td>
+(2)
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+hsGPA
+</td>
+<td>
+0.482<sup>***</sup>
+</td>
+<td>
+0.412<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.090)
+</td>
+<td>
+(0.094)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+ACT
+</td>
+<td>
+</td>
+<td>
+0.015
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+(0.011)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+skipped
+</td>
+<td>
+</td>
+<td>
+-0.083<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+(0.026)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+1.415<sup>***</sup>
+</td>
+<td>
+1.390<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.307)
+</td>
+<td>
+(0.332)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+141
+</td>
+<td>
+141
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+0.172
+</td>
+<td>
+0.234
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+0.166
+</td>
+<td>
+0.217
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Residual Std. Error
+</td>
+<td>
+0.340 (df = 139)
+</td>
+<td>
+0.329 (df = 137)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+F Statistic
+</td>
+<td>
+28.845<sup>***</sup> (df = 1; 139)
+</td>
+<td>
+13.919<sup>***</sup> (df = 3; 137)
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td colspan="2" style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05; <sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>
+<p>当然，在回归结果报告还是在描述性统计中，最终的显示格式可以根据不同期刊来进行调整，比如来一个AER：</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="r-econometric-workflow.html#cb13-1" tabindex="-1"></a><span class="fu">stargazer</span>(lm.list,<span class="at">type =</span> <span class="st">&quot;html&quot;</span>,<span class="at">style =</span> <span class="st">&quot;aer&quot;</span>)</span></code></pre></div>
+<table style="text-align:center">
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="2">
+colGPA
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1)
+</td>
+<td>
+(2)
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+hsGPA
+</td>
+<td>
+0.482<sup>***</sup>
+</td>
+<td>
+0.412<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.090)
+</td>
+<td>
+(0.094)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+ACT
+</td>
+<td>
+</td>
+<td>
+0.015
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+(0.011)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+skipped
+</td>
+<td>
+</td>
+<td>
+-0.083<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+(0.026)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+1.415<sup>***</sup>
+</td>
+<td>
+1.390<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.307)
+</td>
+<td>
+(0.332)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+141
+</td>
+<td>
+141
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+0.172
+</td>
+<td>
+0.234
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+0.166
+</td>
+<td>
+0.217
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Residual Std. Error
+</td>
+<td>
+0.340 (df = 139)
+</td>
+<td>
+0.329 (df = 137)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+F Statistic
+</td>
+<td>
+28.845<sup>***</sup> (df = 1; 139)
+</td>
+<td>
+13.919<sup>***</sup> (df = 3; 137)
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Notes:</em>
+</td>
+<td colspan="2" style="text-align:left">
+<sup>***</sup>Significant at the 1 percent level.
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="2" style="text-align:left">
+<sup>**</sup>Significant at the 5 percent level.
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="2" style="text-align:left">
+<sup>*</sup>Significant at the 10 percent level.
+</td>
+</tr>
+</table>
+<p>若是在latex中显示就会是这样的：</p>
+<p><img src="reg.png" /></p>
+</div>
+</div>
+<div id="在rstudio中写作" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> 在RStudio中写作<a href="r-econometric-workflow.html#在rstudio中写作" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>当然要有一整套的workflow不仅仅是将原代码c-p到overleaf，还需要在Rstudio中一整套的工作流程。</p>
+<p>在RStudio中进行输出，我们会考虑使用bookdown这个包来进行编辑之间的论文，bookdownplus中有较多关于国内高校的毕业论文bookdown模版，能够直接输入相关命令获取模版。</p>
+<p>同时，从最初的Pandoc，再到quarto，typst在近些年得到兴起，其对于格式的多样性支持能够帮助我们获取。但这些新兴文本输入工具可能使用并非广泛，比较常用的方法仍然是选择LaTeX+R，基本上可以实现大部分的功能</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="r-econometric-workflow.html#cb14-1" tabindex="-1"></a><span class="fu">stargazer</span>(<span class="fu">describe</span>(gpa_var,<span class="at">trim =</span> F,<span class="at">skew =</span> F,<span class="at">ranges =</span> F),</span>
+<span id="cb14-2"><a href="r-econometric-workflow.html#cb14-2" tabindex="-1"></a>          <span class="at">type =</span> <span class="st">&quot;latex&quot;</span>,</span>
+<span id="cb14-3"><a href="r-econometric-workflow.html#cb14-3" tabindex="-1"></a>          <span class="at">out =</span> <span class="st">&quot;olsreg.tex&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## % Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
+## % Date and time: Tue, Jun 13, 2023 - 16:43:57
+## \begin{table}[!htbp] \centering 
+##   \caption{} 
+##   \label{} 
+## \begin{tabular}{@{\extracolsep{5pt}}lccccc} 
+## \\[-1.8ex]\hline 
+## \hline \\[-1.8ex] 
+## Statistic &amp; \multicolumn{1}{c}{N} &amp; \multicolumn{1}{c}{Mean} &amp; \multicolumn{1}{c}{St. Dev.} &amp; \multicolumn{1}{c}{Min} &amp; \multicolumn{1}{c}{Max} \\ 
+## \hline \\[-1.8ex] 
+## vars &amp; 4 &amp; 2.500 &amp; 1.291 &amp; 1 &amp; 4 \\ 
+## n &amp; 4 &amp; 141.000 &amp; 0.000 &amp; 141 &amp; 141 \\ 
+## mean &amp; 4 &amp; 7.923 &amp; 10.871 &amp; 1.076 &amp; 24.156 \\ 
+## sd &amp; 4 &amp; 1.156 &amp; 1.179 &amp; 0.320 &amp; 2.844 \\ 
+## se &amp; 4 &amp; 0.097 &amp; 0.099 &amp; 0.027 &amp; 0.240 \\ 
+## \hline \\[-1.8ex] 
+## \end{tabular} 
+## \end{table}</code></pre>
+<p>在LaTex中使用下述语法即可直接在同一文件夹中导入回归表格。</p>
+<pre><code>\include{olsreg.tex}</code></pre>
+<p>其好处在于随时可以对回归结果进行更新。</p>
+</div>
+<div id="presentation" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Presentation<a href="r-econometric-workflow.html#presentation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>同样的道理，一个好的论文不仅仅是在写作，也还需要进行sale，学界通常情况下会选择使用beamer来进行制作slides。</p>
+<p>同样R中也是支持Beamer，对应的介绍在<a href="https://cosx.org/2022/08/beamer-not-down/">统计之都</a>中有极为详细的介绍。但在这里更加推崇的是使用xaringan，一个以javascripts为基础的网页slides制作包。相关的介绍可以在<a href="https://slides.yihui.org/xaringan/zh-CN.html#5">Yihui个人网站</a>。</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="土地流转研究.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["rrep.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

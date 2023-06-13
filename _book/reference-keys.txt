@@ -4,6 +4,12 @@ fig:as
 为何是r
 如何食用
 r入门
+r-applied-econometrics-workflow
+stargazer
+描述性统计
+回归结果报告
+在rstudio中写作
+presentation
 土地流转研究
 载入包
 导入数据
@@ -46,4 +52,6 @@ data
 文献回顾-1
 数据来源
 计算最近的贸易距离
-后记
+appendix
+doing-economics
+the-effect

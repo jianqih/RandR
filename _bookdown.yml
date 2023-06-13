@@ -1,5 +1,5 @@
-book_filename: 'rrep'
-output_dir: "docs"
+book_filename: 'rrp'
+output_dir: "_book"
 output: bookdown::gitbook
 language:
   label:

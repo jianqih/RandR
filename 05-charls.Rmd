@@ -1,0 +1,41 @@
+# CHARLS
+
+[CHARLS](http://charls.pku.edu.cn/)是中国中老年人调查数据，由北大发起的关于中国中老年人的社会调查。
+
+
+## 数据导入
+
+
+```{r}
+library(haven)
+```
+
+
+```{r}
+getwd()
+charls2018cogn <- read_dta("/Volumes/Expansion/micro-base-data/charls/2018/Cognition.dta")
+head(charls2018cogn)
+```
+
+
+```{r}
+library(purrr)
+get_var_label <- function(dta) {
+  labels <- map(dta, function(x) attr(x, "label"))
+  data_frame(
+    name = names(labels),
+    label = as.character(labels)
+  )
+}
+```
+
+```{r}
+#View(charls2018cogn)
+charls2018cogn%>%
+  select(starts_with("dc014"))%>%
+  get_var_label()
+```
+
+
+
+

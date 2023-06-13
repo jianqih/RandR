@@ -1,0 +1,121 @@
+# R-Applied Econometrics Workflow
+
+应用微观的经济学家的工作流会选择使用Stata（宏观学者可能会用Matlab,dynare,Julia）加上LaTeX/Lyx（包括做slides），若可能需要的话加上一些数据库的知识。
+
+这里使用wooldridge包中大学GPA数据来作为演示。
+
+## Stargazer
+
+
+```{r,message=FALSE}
+library(wooldridge)
+library(stargazer)
+data("gpa1")
+```
+
+### 描述性统计
+
+选出我们所关心的几个变量进行描述性统计。
+
+```{r}
+gpa_var <- gpa1%>%
+  select(colGPA,hsGPA,ACT,skipped)
+```
+
+这里调用`psych`来进行描述性统计，但描述性统计的包并不仅限于此，甚至使用`dplyr`中的`summarize`也是一个比较好的选择。
+
+```{r,message=FALSE}
+library(psych)
+```
+
+```{r tbl-star,results='asis'}
+stargazer(describe(gpa_var,trim = F,skew = F,ranges = F),type = "html")
+```
+需要记得的是在option中添加`results='asis'`才会将输出代码以raw code的形式放在文本中。这里因为是html格式的缘故，因此将输出格式输出为html。若使用LaTeX输出格式，则最终在tex中所呈现的状态会是
+
+```{r}
+stargazer(describe(gpa_var,trim = F,skew = F,ranges = F),type = "text")
+```
+
+
+
+
+
+
+
+
+
+### 回归结果报告
+
+先试图去回归一个基准组：
+
+```{r}
+reg.base <- colGPA~hsGPA
+lm.base <- lm(reg.base,gpa_var)
+```
+一个较为常用的快速查看回归结果的方法是使用`summary()`函数。
+
+```{r}
+summary(lm.base)
+```
+
+再添加一组控制组：
+
+```{r}
+gpa.control <- colGPA~hsGPA+ACT+skipped
+lm.control <- lm(gpa.control,data = gpa_var)
+```
+
+
+```{r}
+lm.list <- list(lm.base,lm.control)
+```
+
+```{r,results='asis'}
+stargazer(lm.list,type = "html")
+```
+
+当然，在回归结果报告还是在描述性统计中，最终的显示格式可以根据不同期刊来进行调整，比如来一个AER：
+
+```{r,results='asis'}
+stargazer(lm.list,type = "html",style = "aer")
+```
+
+若是在latex中显示就会是这样的：
+
+![](reg.png)
+
+
+
+## 在RStudio中写作
+
+当然要有一整套的workflow不仅仅是将原代码c-p到overleaf，还需要在Rstudio中一整套的工作流程。
+
+在RStudio中进行输出，我们会考虑使用bookdown这个包来进行编辑之间的论文，bookdownplus中有较多关于国内高校的毕业论文bookdown模版，能够直接输入相关命令获取模版。
+
+同时，从最初的Pandoc，再到quarto，typst在近些年得到兴起，其对于格式的多样性支持能够帮助我们获取。但这些新兴文本输入工具可能使用并非广泛，比较常用的方法仍然是选择LaTeX+R，基本上可以实现大部分的功能
+
+```{r}
+stargazer(describe(gpa_var,trim = F,skew = F,ranges = F),
+          type = "latex",
+          out = "olsreg.tex")
+```
+
+在LaTeX中使用下述语法即可直接在同一文件夹中导入回归表格。
+
+```
+\include{olsreg.tex}
+```
+
+其好处在于随时可以对回归结果进行更新。
+
+
+
+## Presentation
+
+同样的道理，一个好的论文不仅仅是在写作，也还需要进行sale，学界通常情况下会选择使用beamer来进行制作slides。
+
+同样R中也是支持Beamer，对应的介绍在[统计之都](https://cosx.org/2022/08/beamer-not-down/)中有极为详细的介绍。但在这里更加推崇的是使用xaringan，一个以javascripts为基础的网页slides制作包。相关的介绍可以在[Yihui个人网站](https://slides.yihui.org/xaringan/zh-CN.html#5)。
+
+
+
