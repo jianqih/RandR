@@ -1,0 +1,85 @@
+#########################################################################
+##  This file generates Figure 12.1
+##  Endogeneity
+#########################################################################
+
+
+x <- c(1,7)
+m <- c(.5,3.5)
+f <- c(10/11,34/11)
+
+wd <- 1.4
+
+pdf("HANSEN12-1a.pdf",family="Helvetica",colormodel='cmyk',width=4.5,height=4.5)
+plot(x,m,type="l",lty=1,ylab="Dependent Variable",xlab="Regressor",xaxs="i",yaxs="i",ylim=c(.4,3.5),xlim=c(.1,7.9),xaxt="n",yaxt="n",bty="n",lwd=wd)
+lines(x,f,lwd=wd)
+axis(side=1,at=seq(0,8,1),lwd=wd)
+axis(side=2,seq(0,4,1),lwd=wd)
+points(2,1,pch=19,cex=1.0)
+points(4,2,pch=19,cex=1.0)
+points(6,3,pch=19,cex=1.0)
+points(1,1,pch=1,cex=1.0)
+points(3,1,pch=1,cex=1.0)
+points(3,2,pch=1,cex=1.0)
+points(5,2,pch=1,cex=1.0)
+points(5,3,pch=1,cex=1.0)
+points(7,3,pch=1,cex=1.0)
+text(3.7,3.4,"No Measurement Error")
+text(5.6,1.4,"With Measurement Error")
+arrows(5.7,3.35,6.3,3.2,length=0.1,lwd=wd)
+arrows(3.4,1.4,2.7,1.5,length=0.1,lwd=wd)
+dev.off()
+
+postscript("HANSEN12-1a.eps",paper="special",width=4.5,height=4.5,horizontal=FALSE,onefile=FALSE,family="Helvetica",colormodel='cmyk')
+plot(x,m,type="l",lty=1,ylab="Dependent Variable",xlab="Regressor",xaxs="i",yaxs="i",ylim=c(.4,3.5),xlim=c(.1,7.9),xaxt="n",yaxt="n",bty="n",lwd=wd)
+lines(x,f,lwd=wd)
+axis(side=1,at=seq(0,8,1),lwd=wd)
+axis(side=2,seq(0,4,1),lwd=wd)
+points(2,1,pch=19,cex=1.0)
+points(4,2,pch=19,cex=1.0)
+points(6,3,pch=19,cex=1.0)
+points(1,1,pch=1,cex=1.0)
+points(3,1,pch=1,cex=1.0)
+points(3,2,pch=1,cex=1.0)
+points(5,2,pch=1,cex=1.0)
+points(5,3,pch=1,cex=1.0)
+points(7,3,pch=1,cex=1.0)
+text(3.7,3.4,"No Measurement Error")
+text(5.6,1.4,"With Measurement Error")
+arrows(5.7,3.35,6.3,3.2,length=0.1,lwd=wd)
+arrows(3.4,1.4,2.7,1.5,length=0.1,lwd=wd)
+dev.off()
+
+L <- .9
+U <- 3.1
+
+pdf("HANSEN12-1b.pdf",family="Helvetica",colormodel='cmyk',width=4.5,height=4.5)
+plot(c(L,U),c(2,2),type="l",lty=1,ylab="Quantity",xlab="Price",xaxs="i",yaxs="i",ylim=c(.7,3.3),xlim=c(L,3.9),xaxt="n",yaxt="n",bty="n",lwd=wd)
+axis(side=1,at=seq(0,4,1),lwd=wd)
+axis(side=2,seq(0,4,1),lwd=wd)
+lines(c(L,U),c(L,U),lwd=wd)
+lines(c(L,U),c(U,L),lwd=wd)
+points(1,2,pch=19)
+points(3,2,pch=19)
+points(2,1,pch=19)
+points(2,3,pch=19)
+text(3.4,.9,"Demand")
+text(3.4,3.1,"Supply")
+text(3.5,2,"Regression")
+dev.off()
+
+postscript("HANSEN12-1b.eps",paper="special",width=4.5,height=4.5,horizontal=FALSE,onefile=FALSE,family="Helvetica",colormodel='cmyk')
+plot(c(L,U),c(2,2),type="l",lty=1,ylab="Quantity",xlab="Price",xaxs="i",yaxs="i",ylim=c(.7,3.3),xlim=c(L,3.9),xaxt="n",yaxt="n",bty="n",lwd=wd)
+axis(side=1,at=seq(0,4,1),lwd=wd)
+axis(side=2,seq(0,4,1),lwd=wd)
+lines(c(L,U),c(L,U),lwd=wd)
+lines(c(L,U),c(U,L),lwd=wd)
+points(1,2,pch=19)
+points(3,2,pch=19)
+points(2,1,pch=19)
+points(2,3,pch=19)
+text(3.4,.9,"Demand")
+text(3.4,3.1,"Supply")
+text(3.5,2,"Regression")
+dev.off()
+
