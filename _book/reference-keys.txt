@@ -1,4 +1,3 @@
-fig:com-jedc
 fig:as
 缘起
 为何是r

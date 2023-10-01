@@ -8,6 +8,7 @@ figureNums <- captioner(prefix = "图")
 
 对于宗族文化的研究近些年一直是较为火热的研究热点[@Cao2022],[@Hanetsu2019a],[@ZhangShinYi2021a],[@ChenAkiraKai2018],[@ZhangKawagawa2017],[@ZHANG2020100]和[@FAN2023457]。但对于宗族文化的测度方法又各具差异，比如 @ZHANG2020100, @Cao2022 和 @FAN2023457 都是使用上海古籍出版社的县地方族谱数据来测量宗族文化，@ZhangKawagawa2017 使用的是CFPS的数据来测量；@ZhangShinYi2021a 使用的是地方的前三姓氏来作为度量，数据来源是2005年的1%人口抽样调查数据。数据质量上，直观感受是上海古籍出版社的数据会优于其他几个。
 
+为啥宗族文化好，因为在文献中认为它是一个长期慢变量，最早可追溯到明朝，同时很难一时间突然冒出来说这地方突然有很强的宗族文化。所以这个能在做核心解释变量时候排除掉大部分的内生性的可能。同时宗族文化又可以用来解释一些制度和非制度之间的张力关系，内涵是比较丰富的。当然缺点就是很难说这个统计出来的家谱、姓氏占比、祠堂量就等同于宗族文化。
 
 
 ## 数据载入
@@ -21,15 +22,27 @@ library(haven)
 
 ![](image/q1.png)
 
+### 数据清理步骤
+
+
+- 第一，先将成人问卷中所需变量逐年清理，保留个人识别码 pid、家庭识别码 `fid`、以及清理后的变量；
+- 第二，纵向合并 2010-2018 年清理后的成人问卷，得到个体层面面板数据；
+- 第三，将家庭问卷中所需变量逐年清理，保留家户代码 `fid` 和清理后得到变量；
+- 第四，纵向合并 2010-2018 年清理后的家庭问卷，得到家庭层面面板数据；
+- 第五，根据年份 `year` 和家户识别码 `fid` 横向合并家庭层面面板数据和个体层面面板数据，得到研究所需的家户-个体层面 2010-2018 年面板数据。
+
 
 ```{r}
 cfps2010comm <- read_dta("/Volumes/Expansion/micro-base-data/社区数据cfps/cfps2010comm_201906.dta")
-cfps2010comm%>%
-  select(cid,provcd,countyid,cyear,cmonth,ca3_s_6,ca3_s_7)->df1
+df1 <- cfps2010comm%>%
+  select(cid,provcd,countyid,cyear,cmonth,ca3_s_6,ca3_s_7)
 head(df1)
 dim(df1)
+df1%>%str()
 ```
 
+这里用`str()`来查看具体的变量和回答的信息。其中的变量分别表示村居样本代码、省国标码、区县顺序码、采访年份、访问月份、您村/居地界内设施：选择6、您村/居地界内设施：选择7，同时还可以进一步看到
+数值与对应标签。其中的村居样本代码也是可以在家户调查中得到对应的。
 
 ```{r}
 cfps2010comm$ca3_s_6[which(df1$ca3_s_6==-8)]=0
@@ -113,15 +126,15 @@ d4 %>%
 
 ## 其他数据源
 
-目前学界用的较为广泛的是通过上海家族族谱来测算宗族文化，也就是看一个地方的族谱的密度来作为宗族文化的代理变量，代表性学者有浙大的[张川川老师](https://scholar.google.com/citations?user=_YWE1C4AAAAJ&hl=en&oi=ao)，他目前发表的关于宗族文化的论文有[@Cao2022], [@ZHANG2020100], [@ZhangKawagawa2017]。
-很巧，他和合作者[Yiqin Xu](https://yiqingxu.org/)和博士生曹家瑞在JDE刊发的论文有[replicate file](https://yiqingxu.org/papers/english/2022_famine/replication.zip)(可直接下载)
+目前学界用的较为广泛的是通过上海家族族谱来测算宗族文化，也就是看一个地方的族谱的密度来作为宗族文化的代理变量，代表性学者有浙大的[张川川](https://scholar.google.com/citations?user=_YWE1C4AAAAJ&hl=en&oi=ao)，他目前发表的关于宗族文化的论文有[@Cao2022], [@ZHANG2020100], [@ZhangKawagawa2017]。
+很巧，他和合作者[Yiqin Xu](https://yiqingxu.org/)和博士生Jiarui Cao在JDE刊发的论文有[replicate file](https://yiqingxu.org/papers/english/2022_famine/replication.zip)，可直接下载。
 
 
 但图中的图是使用ArcGIS来实现的，这里试图通过R来进行复刻。
 
 
 ```{r}
-clan_gbook <- read_dta("/Users/a182501/stata-replicat/rep-jde-2021-cao-xu-zhang/datafiles/gbooks_byyear.dta")
+clan_gbook <- read_dta("/Users/a182501/stata-rep/rep-jde-2021-cao-xu-zhang/datafiles/gbooks_byyear.dta")
 head(clan_gbook)
 p <- clan_gbook%>%
   dplyr::filter(year<=2010&year>=1400)%>%
@@ -135,7 +148,6 @@ p+geom_vline(aes(xintercept=1950), colour="#BB0000",size = 0.2)+
 在统计上的大小与原作者给出的频率有一定的差异，不过形状是相同的。
 
 
-
 ```{r clan-data}
 library(mapchina)
 library(sysfonts)
@@ -143,7 +155,7 @@ library(showtextdb)
 library(showtext)
 library(sf)
 library(haven)
-clan_disr <- read_dta("/Users/a182501/stata-replicat/rep-jde-2021-cao-xu-zhang/datafiles/clan_distr.dta")
+clan_disr <- read_dta("/Users/a182501/stata-rep/rep-jde-2021-cao-xu-zhang/datafiles/clan_distr.dta")
 arrange(clan_disr,provcd)
 ```
 
@@ -161,7 +173,7 @@ head(china)
 我们这里选择使用cfps2014年的数据，处理方法基本上与2010年一致。
 
 ```{r}
-cfps2014comm <- read_dta("/Users/a182501/project_set/data/cfps/2014/cfps2014comm_201906.dta")
+cfps2014comm <- read_dta("/Volumes/Expansion/micro-base-data/cfps/2014/cfps2014comm_201906.dta")
 cfps2014comm$ca3_s_6[which(cfps2014comm$ca3_s_6==-8)] <- 0
 cfps2014comm$ca3_s_7[which(cfps2014comm$ca3_s_7==-8)] <- 0
 #View(cfps2014comm)随时观察变量
@@ -171,30 +183,38 @@ head(comm14)
 ```
 
 
-调用家户数据
+### 使用家户数据
 
 ```{r }
-famconf14 <- read_dta("/Users/a182501/project_set/data/cfps/2014/cfps2014famconf_170630.dta")
+famconf14 <- read_dta("/Volumes/Expansion/micro-base-data/cfps/2014/cfps2014famconf_170630.dta")
 head(famconf14)
 ```
+
+
+### 数据合并
 
 使用左连接`left_join`以保留我们的家户信息，用村居样本代码`cid14`来进行匹配。
 
 ```{r}
 library(visdat)
-
 famcon14_clan <- left_join(famconf14,comm14,by="cid14")
 dim(famcon14_clan)
 dim(famconf14)
+```
+
+
+### 数据清洗
+
+
+
+```{r}
 #View(famcon14_clan)
 famcon14_clan%>%
   select(cid14,cid10,ca3_s_6,ca3_s_7,tb2_a_p,tb1y_a_p,cfps2014_interv_p,tb4_a14_p,urban14,tb4_a14_f)%>%
-  dplyr::filter(urban14==0)%>%
-  dplyr::filter(tb4_a14_p!=-8)%>%
-  dplyr::filter(tb4_a14_p!=-9)%>%
+  dplyr::filter(urban14==0)%>%  # 找出是农村的
+  dplyr::filter(tb4_a14_p!=-8|-9|-10|-2|-1)%>% # 剔除不适用的
   dplyr::filter(!is.na(cid10))%>%
   mutate(age=2014-tb1y_a_p)%>%
-  
   mutate(eduyear = case_when(
     tb4_a14_p==8 ~ 23,
     tb4_a14_p==7 ~ 19,
@@ -222,39 +242,54 @@ famcon14_clan%>%
     tb4_a14_f==3 ~ 9,
     tb4_a14_f==2 ~ 6,
     tb4_a14_f==1 ~ 0
-  ))-> facon14_clan_clean
+  )) -> facon14_clan_clean
 ```
+
+
+
 
 ```{r}
-dim(facon14_clan_clean)
-sum(table(facon14_clan_clean$eduyear))
-table(facon14_clan_clean$eduyear_fa)
-table(facon14_clan_clean$temple_dummy)
+dim(facon14_clan_clean) # 查看数据维度 
+sum(table(facon14_clan_clean$eduyear)) #受教育年限
+table(facon14_clan_clean$eduyear_fa) # 父亲的受教育年限
+table(facon14_clan_clean$temple_dummy) # 是否有祠堂
 ```
 
+### 回归`eduyear~temple_dummy`
+
+这里试图研究受教育年限是否会受到祠堂存在与否（宗族文化）的影响。控制年龄和父亲的受教育年限。
 
 ```{r}
 colnames(facon14_clan_clean)
-reg_temple <- lm(data = facon14_clan_clean,eduyear~temple_dummy+age+tb2_a_p)# 控制母亲的受教育水平/父亲的受教育水平
-summary(reg_temple)
+reg_temple_fa <- lm(data = facon14_clan_clean,eduyear~temple_dummy+age+eduyear_fa)# 控制父亲的受教育水平
+summary(reg_temple_fa)
 ```
 
+回归的结果显示系数为负相关，同时并不显著。
+
+
 ```{r}
-reg_genealogy <- lm(data = facon14_clan_clean,eduyear~genealogy_dummy+age+tb2_a_p)
+reg_genealogy <- lm(data = facon14_clan_clean,eduyear~genealogy_dummy+age+eduyear_fa)
 summary(reg_genealogy)
 ```
 
 
-还是对族谱的回归会微弱显著，不过都是负的系数，和一些学者之前研究的结论有一些差别，但可能是在这里控制变量控制的不够，可能存在内生性问题，比如遗漏一些关键的控制变量，受访者的智力水平、家庭规模，父亲的政治背景、教育理念、文化资本等。
+还是对族谱的回归也并不显著，不过都是负的系数，和一些学者之前研究的结论有一些差别，但可能是在这里控制变量控制的不够，可能存在内生性问题，比如遗漏一些关键的控制变量，受访者的智力水平、家庭规模，父亲的政治背景、教育理念、文化资本等。
 
 
 不过个人认为这里可以使用族谱的数量，并不需要将其转变为虚拟变量。
 
 
 ```{r}
-reg_genealogy_cont <- lm(data = facon14_clan_clean,eduyear~ca3_s_7+age+tb2_a_p)
-summary(reg_genealogy_cont)
+str(facon14_clan_clean$ca3_s_7)
+facon14_clan_clean%>%
+  dplyr::filter(ca3_s_7>=0)%>%
+  lm(formula=eduyear~ca3_s_7+age+eduyear_fa)%>%
+  summary()
 ```
+
+虽然最终的结果差别并没有太多。
+
 
 
 
